@@ -3,7 +3,7 @@
 clear all;clc;
 %%
     global v;
-    v = 333; %m\s @ air
+    v = 0.3432; %km\s @ air
       
     xyz0 = [3 4 0];
     
@@ -18,11 +18,11 @@ clear all;clc;
     
     t = ([xyz0;xyz]);
     
-    t = [];
+    r = [];
     for i=1:5
-        t = [t ((xyz(i,1)-xyz0(1))^2+(xyz(i,2)-xyz0(2))^2+(xyz(i,3)-xyz0(3))^2)^0.5];
+        r = [r ((xyz(i,1)-xyz0(1))^2+(xyz(i,2)-xyz0(2))^2+(xyz(i,3)-xyz0(3))^2)^0.5];
     end
-    t = t/v;
+    t = r/v;
     t0 = 0;
     
     distance = pdist(xyz);
@@ -30,30 +30,38 @@ clear all;clc;
 
       
       n = size(xyz,1);
-%       A = zeros(n,1);
-%       B = A;
-%       C = A;
-%       D = A;
+       A = zeros(n-1,1);
+       B = A;
+       C = A;
+       D = A;
       
       vt1 = v*t(1);
-      xDt = 2*xyz(1,1)/vt1;
-      yDt = 2*xyz(1,2)/vt1;
-      zDt = 2*xyz(1,3)/vt1;
+      xDt1 = 2*xyz(1,1)/vt1;
+      yDt1 = 2*xyz(1,2)/vt1;
+      zDt1 = 2*xyz(1,3)/vt1;
       
       xyz1Dvt1 = (xyz(1,1)^2 + xyz(1,2)^2 + xyz(1,3)^2)/vt1;
       
-      eq = [];
+      eq = cell(n-1,1);
+      
+      
       for i=2:n
         vti = (v*t(i));
-        A = 2*xyz(i,1)/vti - xDt;
-        B = 2*xyz(i,2)/vti - yDt;
-        C = 2*xyz(i,3)/vti - zDt;
-        D = vti - vt1 - ((xyz(i,1)^2 + xyz(i,2)^2 + xyz(i,3)^2)/vti) + xyz1Dvt1;
+        A(i-1) = 2*xyz(i,1)/vti - xDt1;
+        B(i-1) = 2*xyz(i,2)/vti - yDt1;
+        C(i-1) = 2*xyz(i,3)/vti - zDt1;
+        D(i-1) = vti - vt1 - ((xyz(i,1)^2 + xyz(i,2)^2 + xyz(i,3)^2)/vti) + xyz1Dvt1;
         
-        eq = [eq
+        equation = strcat('0=(',num2str(A),')*x+(',num2str(B),')*y+(',num2str(C),')*z+(',num2str(D),')');
+        eq(i-1) = {equation};
       end
-      
-
+    
+   %%
+    syms x y z;
+    s=solve('0=(-3.8148)*x+(1.1726)*y+(0)*z+(4.9715)','0=(-3.0141)*x+(-1.5856)*y+(0)*z+(11.8133)','0=(-4.4049)*x+(-0.4714)*y+(0)*z+(10.7236)','0=(-0.53803)*x+(-0.4714)*y+(0)*z+(-0.96134)');
+    
+    [s.x s.y]
+    %%
     
     %rS = triu(sym('r',[4 4]),1);
 %     syms x y r1 r2 r3 r0;
