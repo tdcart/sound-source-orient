@@ -4,26 +4,33 @@ clear all;clc;
 %%
     global v;
     v = 0.3432; %km\s @ air
-    xyz0 = [3 4 0];
+    xyzSource = [2 3 0];
+    xyz0 = [4 4 0];
     
     xyz = zeros(5,3);
     xyz(1,:) = [6 1 0];
     xyz(2,:) = [-3 5 0];
     xyz(3,:) = [-1 -6 0];
-    xyz(4,:) = [-13 0 0];
-    xyz(5,:) = [20 0 0];
+    xyz(4,:) = [-6 9 0];
+    xyz(5,:) = [12 10 0];
+    xyz(6,:) = [-12 -10 0];
+    xyz(7,:) = [15 -13 0];
     
     n = size(xyz,1);
     
     
     r = [];
+    rSource = r;
     for i=1:n
+        rSource = [rSource ((xyz(i,1)-xyzSource(1))^2+(xyz(i,2)-xyzSource(2))^2+(xyz(i,3)-xyzSource(3))^2)^0.5];
         r = [r ((xyz(i,1)-xyz0(1))^2+(xyz(i,2)-xyz0(2))^2+(xyz(i,3)-xyz0(3))^2)^0.5];
     end
+    rSource = [((xyz0(1)-xyzSource(1))^2+(xyz0(2)-xyzSource(2))^2+(xyz0(3)-xyzSource(3))^2)^0.5 rSource];
+    rSource = rSource - rSource(1);
+    r = rSource(2:n+1);
     t = r/v;
-    t0 = 0;
     
-    distance = pdist(xyz);
+    %distance = pdist(xyz);
     
 
       
