@@ -46,10 +46,13 @@ clear all;clc;
 
       
       
-    A = zeros(n-1,1);
+    A = zeros(n,1);
+    A(1) = 0;
     B = A;
     C = A;
     D = A;
+    
+    
 
     vt1 = v*t(1);
     xDt1 = 2*xyz(1,1)/vt1;
@@ -63,10 +66,10 @@ clear all;clc;
       
     for i=2:n
         vti = (v*t(i));
-        A(i-1) = 2*xyz(i,1)/vti - xDt1;
-        B(i-1) = 2*xyz(i,2)/vti - yDt1;
-        C(i-1) = 2*xyz(i,3)/vti - zDt1;
-        D(i-1) = vti - vt1 - ((xyz(i,1)^2 + xyz(i,2)^2 + xyz(i,3)^2)/vti) + xyz1Dvt1;
+        A(i) = 2*xyz(i,1)/vti - xDt1;
+        B(i) = 2*xyz(i,2)/vti - yDt1;
+        C(i) = 2*xyz(i,3)/vti - zDt1;
+        D(i) = vti - vt1 - ((xyz(i,1)^2 + xyz(i,2)^2 + xyz(i,3)^2)/vti) + xyz1Dvt1;
 
         %saving the equation for possible later use ('solve' function)
         equation = strcat('0=(',num2str(A(i-1)),')*x+(',num2str(B(i-1)),')*y+(',num2str(C(i-1)),')*z+(',num2str(D(i-1)),')');
